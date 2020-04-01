@@ -1,4 +1,5 @@
 #include <Servo.h>
+#include <Brain.h>
 
 int ServoP1 = 7; //Servo Pin
 Servo regServ1; //Servo Object 
@@ -15,6 +16,13 @@ String inString = "";
 void loop()
 {
 ServoWriter(&regServ1);
+  
+brainValue = serial.readCSV();      //character string with latest brain values
+lgamma = serial.readLowGamma();     //reads low gamma waves
+hgamma = serial.readHighGamma();    //reads high gamma waves
+lbeta = serial.readLowBeta();       //reads low beta waves
+hbeta = serial.readHighBeta();      //reads high beta waves
+  
 }
 int ServoWriter(Servo *regServ1)
 {
@@ -33,6 +41,5 @@ int ServoWriter(Servo *regServ1)
   else {
       Serial.println ("Enter a Valid Number");
   }
-
-
 }
+
