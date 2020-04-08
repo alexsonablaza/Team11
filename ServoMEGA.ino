@@ -13,7 +13,15 @@ void setup()
   Serial.begin (9600); //Activate Serial Comms.
   //ServoWriter(&regServ1);
 }
-
+byte ReadOneByte(){
+  int ByteRead;
+  while(!Serial.available());
+  ByteRead = Serial.read();
+  Serial.print((char)ByteRead);
+  Byte = ByteRead.toInt(); 
+  return ByteRead;
+}
+byte attention = 0;
 int recv_byte = 0; //
 String inString = "";
 
@@ -46,10 +54,11 @@ int ServoWriter(Servo *regServ1)
   intLgamma = lgamma.toInt();
   intLbeta = lbeta.toInt();
   intHbeta = hbeta.toInt();
-  
+  Serial.print(attention, DEC);
+ 
   pos = 180 //position
    
-  if (isDigit(intHgamma) && (intHgamma >= 0) || (intHgamma <= 180)) 
+  if (isDigit(attention) && (attention >= 0) || (attention <= 180)) 
   {
   regServ1-> write(pos);
   delayMicroseconds(100);
