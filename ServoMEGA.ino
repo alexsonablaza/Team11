@@ -11,7 +11,7 @@ void setup()
   regServ1.attach(ServoP1); //Attach 
   regServ1.write(0);
   Serial.begin (9600); //Activate Serial Comms.
-  //ServoWriter(&regServ1);
+  ServoWriter(&regServ1);
 }
 byte ReadOneByte(){
   int ByteRead;
