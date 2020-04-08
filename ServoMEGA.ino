@@ -1,5 +1,5 @@
 #include <Servo.h>
-#include <Brain.h>
+//#include <Brain.h>
 
 int ServoP1 = 7; //Servo Pin
 Servo regServ1; //Servo Object 
@@ -28,11 +28,14 @@ String inString = "";
 void loop()
 {
 ServoWriter(&regServ1);
-brainValue = serial.readCSV();      //character string with latest brain values
+  
+/*brainValue = serial.readCSV();      //character string with latest brain values
 lgamma = serial.readLowGamma();     //reads low gamma waves
 hgamma = serial.readHighGamma();    //reads high gamma waves
 lbeta = serial.readLowBeta();       //reads low beta waves
 hbeta = serial.readHighBeta();      //reads high beta waves
+*/
+  
 }
 
 int ServoWriter(Servo *regServ1)
@@ -47,15 +50,14 @@ int ServoWriter(Servo *regServ1)
   Serial.print("Number Entered: ");
   Serial.println(inDat);
   recv_byte =inDat.toInt(); 
- */
-  
-  Serial.println(hgamma);
+
   intHgamma = hgamma.toInt();   //converts string to integer
   intLgamma = lgamma.toInt();
   intLbeta = lbeta.toInt();
   intHbeta = hbeta.toInt();
+  */
+  
   Serial.print(attention, DEC);
- 
   pos = 180 //position
    
   if (isDigit(attention) && (attention >= 0) || (attention <= 180)) 
