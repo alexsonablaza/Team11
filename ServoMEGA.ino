@@ -42,14 +42,16 @@ int ServoWriter(Servo *regServ1)
  */
   
   Serial.println(hgamma);
-  recv_byte = hgamma.toInt();
+  intHgamma = hgamma.toInt();   //converts string to integer
   intLgamma = lgamma.toInt();
   intLbeta = lbeta.toInt();
   intHbeta = hbeta.toInt();
   
-  if (isDigit(recv_byte) && (recv_byte >= 0) || (recv_byte <= 180)) 
+  pos = 180 //position
+   
+  if (isDigit(intHgamma) && (intHgamma >= 0) || (intHgamma <= 180)) 
   {
-  regServ1-> write(recv_byte);
+  regServ1-> write(pos);
   delayMicroseconds(100);
   }
   else 
