@@ -1,7 +1,3 @@
-////////////////////////////////////////////////////////////////////////
-// Arduino Bluetooth Interface with Mindwave
-// 
-////////////////////////////////////////////////////////////////////////
 #include <Servo.h>             //Servo library
 Servo servo_test;        //initialize a servo object for the connected servo  
                 
@@ -173,8 +169,11 @@ void loop() {
           //For all cases where attention is greater than 60
           case 6:              
            
-            digitalWrite(LIGHTON, HIGH);
-             for(angle = 0; angle < 180; angle += 1)    // command to move from 0 degrees to 180 degrees 
+  
+ 
+  digitalWrite(LIGHTON, HIGH);
+   //*
+  for(angle = 0; angle < 180; angle += 1)    // command to move from 0 degrees to 180 degrees 
   {                                  
     servo_test.write(angle);                 //command to rotate the servo to the specified angle
     delay(15);                       
@@ -189,7 +188,22 @@ void loop() {
   } 
 
     delay(1000);
-                     
+  *//
+  
+   for(attention <70; attention > 60)    // command to move from 90 degrees between 60- 70 attention level
+  {                                  
+    servo_test.write(90);                 //command to rotate the servo to the specified angle
+    delay(15);                       
+  } 
+ 
+  delay(1000);
+  
+  for(angle > 70; attention <60 )     // command to move to 0 degrees if not rotating hand
+  {                                
+    servo_test.write(0);              //command to rotate the servo to the specified angle
+    delay(5);                       
+  } 
+  
             break;
           case 7:
           
