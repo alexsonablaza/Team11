@@ -1,5 +1,6 @@
 #include <Servo.h>             //Servo library
-Servo servo_test;        //initialize a servo object for the connected servo  
+Servo servo_left;        //initialize a servo object for the connected servo  
+Servo servo_right;
                 
 int angle = 0;    
 //GPIO13 CONNECTION LED STATUS
@@ -30,8 +31,8 @@ boolean bigPacket = false;
 //////////////////////////
 void setup() {
 
-  servo1.attach(7);
-  servo2.attach(8);
+  servo_left.attach(7);
+  servo_right.attach(8);
   pinMode(LIGHTON, OUTPUT);
  
   pinMode(LED, OUTPUT);
@@ -174,8 +175,8 @@ void loop() {
   if(poorQuality < 150){   
   for(attention > 0;attention <25)    // no to low leve signal
   {                                  
-    servo1.write(0);                 //reset to initial state.
-    servo2.write(0);                 
+    servo_left.write(0);                 //reset to initial state.
+    servo_right.write(0);                 
    delay(100);                       
   } 
  
@@ -183,8 +184,8 @@ void loop() {
   
   for(attention > 25; attention < 50)     // upcoming signal
   {                                
-    servo1.write(45);              //move to 45 degrees
-    servo2.write(45);
+    servo_left.write(45);              //move to 45 degrees
+    servo_right.write(45);
     delay(100);                       
   } 
 
@@ -192,8 +193,8 @@ void loop() {
     
    for(attention <70; attention > 60)    // command to move from 90 degrees between 60- 70 attention level
   {                                  
-    servo1.write(90);                
-    servo2.write(90);
+    servo_left.write(90);                
+    servo_right.write(90);
     delay(100);                       
   } 
  
@@ -201,8 +202,8 @@ void loop() {
   
   for(angle > 70; attention <60 )     //attention level is above our threshold
   {                                
-    servo1.write(0);              //reset to 0
-    servo2.write(0);
+    servo_left.write(0);              //reset to 0
+    servo_right.write(0);
     delay(100);                       
   } 
   }
