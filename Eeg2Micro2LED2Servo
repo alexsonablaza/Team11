@@ -32,7 +32,8 @@ boolean bigPacket = false;
 //////////////////////////
 void setup() {
 
-  servo_test.attach(7);
+  servo1.attach(7);
+  servo2.attach(8);
   pinMode(LIGHTON, OUTPUT);
  
 
@@ -170,20 +171,22 @@ void loop() {
           case 6:              
            
   
- 
+// code for converting brain waves to write to servo motors.
   digitalWrite(LIGHTON, HIGH);
    //*
-  for(angle = 0; angle < 180; angle += 1)    // command to move from 0 degrees to 180 degrees 
+  for(attention > 0;attention <25)    // no to low leve signal
   {                                  
-    servo_test.write(angle);                 //command to rotate the servo to the specified angle
-    delay(15);                       
+    servo1.write(0);                 //reset to initial state.
+    servo2.write(0);                 
+   delay(15);                       
   } 
  
   delay(1000);
   
-  for(angle = 180; angle>=1; angle-=5)     // command to move from 180 degrees to 0 degrees 
+  for(attention > 25; attention < 50)     // upcoming signal
   {                                
-    servo_test.write(angle);              //command to rotate the servo to the specified angle
+    servo1.write(45);              //move to 45 degrees
+    servo2.write(45);
     delay(5);                       
   } 
 
@@ -192,15 +195,17 @@ void loop() {
   
    for(attention <70; attention > 60)    // command to move from 90 degrees between 60- 70 attention level
   {                                  
-    servo_test.write(90);                 //command to rotate the servo to the specified angle
+    servo1.write(90);                
+    servo2.write(90);
     delay(15);                       
   } 
  
   delay(1000);
   
-  for(angle > 70; attention <60 )     // command to move to 0 degrees if not rotating hand
+  for(angle > 70; attention <60 )     //attention level is above our threshold
   {                                
-    servo_test.write(0);              //command to rotate the servo to the specified angle
+    servo1.write(0);              //reset to 0
+    servo2.write(0);
     delay(5);                       
   } 
   
