@@ -130,6 +130,7 @@ void loop() {
           Serial.print(millis() - lastReceivedPacket, DEC);
           lastReceivedPacket = millis();
           Serial.print("\n");
+if(bigPacket){          
 if (attention = 0, attention >0, attention <40)
 {
   servo_left.write(0);              //move to 45 degrees
@@ -222,7 +223,7 @@ else if (attention >50, attention <75)
   }
   */
  }
- 
+ }
 #endif        
         bigPacket = false;        
       }
