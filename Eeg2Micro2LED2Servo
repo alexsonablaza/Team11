@@ -116,72 +116,6 @@ void loop() {
 
 #if !DEBUGOUTPUT
 
- if(attention > 0;attention <25)    // no to low leve signal
-  {                                  
-    servo_left.write(0);                 //reset to initial state.
-    servo_right.write(0);    
-    Serial.print("PoorQuality: ");
-          Serial.print(poorQuality, DEC);
-          Serial.print(" Attention: ");
-          Serial.print(attention, DEC);
-          Serial.print(" Time since last packet: ");
-          Serial.print(millis() - lastReceivedPacket, DEC);
-          lastReceivedPacket = millis();
-          Serial.print("\n");
-   delay(100);                       
-  } 
- 
-  delay(1000);
-  
-  if(attention > 25; attention < 50)     // upcoming signal
-  {                                
-    servo_left.write(45);              //move to 45 degrees
-    servo_right.write(45);
-    Serial.print("PoorQuality: ");
-          Serial.print(poorQuality, DEC);
-          Serial.print(" Attention: ");
-          Serial.print(attention, DEC);
-          Serial.print(" Time since last packet: ");
-          Serial.print(millis() - lastReceivedPacket, DEC);
-          lastReceivedPacket = millis();
-          Serial.print("\n");
-    delay(100);                       
-  } 
-
-    delay(1000);
-    
-   if(attention <70; attention > 60)    // command to move from 90 degrees between 60- 70 attention level
-  {                                  
-    servo_left.write(90);                
-    servo_right.write(90);
-    Serial.print("PoorQuality: ");
-          Serial.print(poorQuality, DEC);
-          Serial.print(" Attention: ");
-          Serial.print(attention, DEC);
-          Serial.print(" Time since last packet: ");
-          Serial.print(millis() - lastReceivedPacket, DEC);
-          lastReceivedPacket = millis();
-          Serial.print("\n");
-    delay(100);                       
-  } 
- 
-  delay(1000);
-  
-  if(attention > 70; attention <60 )     //attention level is above our threshold
-  {                                
-    servo_left.write(0);              //reset to 0
-    servo_right.write(0);
-    Serial.print("PoorQuality: ");
-          Serial.print(poorQuality, DEC);
-          Serial.print(" Attention: ");
-          Serial.print(attention, DEC);
-          Serial.print(" Time since last packet: ");
-          Serial.print(millis() - lastReceivedPacket, DEC);
-          lastReceivedPacket = millis();
-          Serial.print("\n");
-    delay(100);                       
-  } 
-
         if(bigPacket) {
           if(poorQuality == 0)
             digitalWrite(LED, HIGH);
@@ -195,69 +129,70 @@ void loop() {
           Serial.print(millis() - lastReceivedPacket, DEC);
           lastReceivedPacket = millis();
           Serial.print("\n");
-/*
+
           switch(attention / 13) {
-          case 0:
-            
-            digitalWrite(LIGHTON, LOW);
-                     
-            break;
-          //No connection or low connection light is off
-          case 1:
-           
-            digitalWrite(LIGHTON, LOW);
-         
-            break;
-           //Poor quality is high then light is off
-          case 2:
-           
-            digitalWrite(LIGHTON, LOW);
-         
-            break;
-          case 3:              
+         case 0:
+          servo_left.write(45);              //move to 45 degrees
+          servo_right.write(45);
+          Serial.print("PoorQuality: ");
+          Serial.print(poorQuality, DEC);
+          Serial.print(" Attention: ");
+          Serial.print(attention, DEC);
+          Serial.print(" Time since last packet: ");
+          Serial.print(millis() - lastReceivedPacket, DEC);
+          lastReceivedPacket = millis();
+          Serial.print("\n");
+          delay(100);       
+          break;
           
-            digitalWrite(LIGHTON, LOW);
-                       
-            break;
-          case 4:
-         
-            digitalWrite(LIGHTON, LOW);
-                     
-            break;
-          //If I am not active then low
-          case 5:
+         case 1:
+          servo_left.write(0);                 //reset to initial state.
+          servo_right.write(0);    
+          Serial.print("PoorQuality: ");
+          Serial.print(poorQuality, DEC);
+          Serial.print(" Attention: ");
+          Serial.print(attention, DEC);
+          Serial.print(" Time since last packet: ");
+          Serial.print(millis() - lastReceivedPacket, DEC);
+          lastReceivedPacket = millis();
+          Serial.print("\n");
+          delay(100);       
+          break;
+          
+
+         case 2:              
+           servo_left.write(90);                
+           servo_right.write(90);
+           Serial.print("PoorQuality: ");
+           Serial.print(poorQuality, DEC);
+           Serial.print(" Attention: ");
+           Serial.print(attention, DEC);
+           Serial.print(" Time since last packet: ");
+           Serial.print(millis() - lastReceivedPacket, DEC);
+           lastReceivedPacket = millis();
+           Serial.print("\n");
+           delay(100);   
+           break;
            
-            digitalWrite(LIGHTON, LOW);
+         case 3:
+          servo_left.write(0);              //reset to 0
+          servo_right.write(0);
+          Serial.print("PoorQuality: ");
+          Serial.print(poorQuality, DEC);
+          Serial.print(" Attention: ");
+          Serial.print(attention, DEC);
+          Serial.print(" Time since last packet: ");
+          Serial.print(millis() - lastReceivedPacket, DEC);
+          lastReceivedPacket = millis();
+          Serial.print("\n");
+          delay(100);          
+            break;
 
 
-          //For all cases where attention is greater than 60
-          case 6:              
-        
-            digitalWrite(LIGHTON, HIGH);
-  
-            break;
-          case 7:
-          
-            digitalWrite(LIGHTON, HIGH);
-                        
-            break;    
-          case 8:
-          
-            digitalWrite(LIGHTON, HIGH);
-          
-            break;
-          case 9:
-         
-            digitalWrite(LIGHTON, HIGH);
-         
-            break;
-          case 10:
-       
-            digitalWrite(LIGHTON, HIGH);
-      
-            break;           
-          }   
-          */                  
+
+
+     
+                           
  }
  
 #endif        
