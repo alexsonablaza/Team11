@@ -187,12 +187,7 @@ void loop() {
           Serial.print("\n");
           delay(100);          
             break;
-
-
-
-
-     
-                           
+  }                      
  }
  
 #endif        
