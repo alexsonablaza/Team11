@@ -121,6 +121,7 @@ void loop() {
             digitalWrite(LED, HIGH);
           else
             digitalWrite(LED, LOW);
+            
           Serial.print("PoorQuality: ");
           Serial.print(poorQuality, DEC);
           Serial.print(" Attention: ");
@@ -134,6 +135,7 @@ void loop() {
          case 0:
           servo_left.write(45);              //move to 45 degrees
           servo_right.write(45);
+          /*
           Serial.print("PoorQuality: ");
           Serial.print(poorQuality, DEC);
           Serial.print(" Attention: ");
@@ -144,11 +146,13 @@ void loop() {
           Serial.print("\n");
           delay(100);       
           break;
-          
+          */
+  
          case 1:
           servo_left.write(0);                 //reset to initial state.
           servo_right.write(0);    
-          Serial.print("PoorQuality: ");
+         /*
+         Serial.print("PoorQuality: ");
           Serial.print(poorQuality, DEC);
           Serial.print(" Attention: ");
           Serial.print(attention, DEC);
@@ -157,13 +161,14 @@ void loop() {
           lastReceivedPacket = millis();
           Serial.print("\n");
           delay(100);       
+          */
           break;
           
 
          case 2:              
            servo_left.write(90);                
            servo_right.write(90);
-           Serial.print("PoorQuality: ");
+           /*Serial.print("PoorQuality: ");
            Serial.print(poorQuality, DEC);
            Serial.print(" Attention: ");
            Serial.print(attention, DEC);
@@ -172,11 +177,13 @@ void loop() {
            lastReceivedPacket = millis();
            Serial.print("\n");
            delay(100);   
+           */
            break;
            
          case 3:
           servo_left.write(0);              //reset to 0
           servo_right.write(0);
+          /*
           Serial.print("PoorQuality: ");
           Serial.print(poorQuality, DEC);
           Serial.print(" Attention: ");
@@ -185,7 +192,8 @@ void loop() {
           Serial.print(millis() - lastReceivedPacket, DEC);
           lastReceivedPacket = millis();
           Serial.print("\n");
-          delay(100);          
+          delay(100);      
+          */
             break;
   }                      
  }
