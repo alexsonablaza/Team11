@@ -198,7 +198,15 @@ void loop() {
   if(attention > 0;attention <25)    // no to low leve signal
   {                                  
     servo_left.write(0);                 //reset to initial state.
-    servo_right.write(0);                 
+    servo_right.write(0);    
+    Serial.print("PoorQuality: ");
+          Serial.print(poorQuality, DEC);
+          Serial.print(" Attention: ");
+          Serial.print(attention, DEC);
+          Serial.print(" Time since last packet: ");
+          Serial.print(millis() - lastReceivedPacket, DEC);
+          lastReceivedPacket = millis();
+          Serial.print("\n");
    delay(100);                       
   } 
  
@@ -208,6 +216,14 @@ void loop() {
   {                                
     servo_left.write(45);              //move to 45 degrees
     servo_right.write(45);
+    Serial.print("PoorQuality: ");
+          Serial.print(poorQuality, DEC);
+          Serial.print(" Attention: ");
+          Serial.print(attention, DEC);
+          Serial.print(" Time since last packet: ");
+          Serial.print(millis() - lastReceivedPacket, DEC);
+          lastReceivedPacket = millis();
+          Serial.print("\n");
     delay(100);                       
   } 
 
@@ -217,6 +233,14 @@ void loop() {
   {                                  
     servo_left.write(90);                
     servo_right.write(90);
+    Serial.print("PoorQuality: ");
+          Serial.print(poorQuality, DEC);
+          Serial.print(" Attention: ");
+          Serial.print(attention, DEC);
+          Serial.print(" Time since last packet: ");
+          Serial.print(millis() - lastReceivedPacket, DEC);
+          lastReceivedPacket = millis();
+          Serial.print("\n");
     delay(100);                       
   } 
  
@@ -226,6 +250,14 @@ void loop() {
   {                                
     servo_left.write(0);              //reset to 0
     servo_right.write(0);
+    Serial.print("PoorQuality: ");
+          Serial.print(poorQuality, DEC);
+          Serial.print(" Attention: ");
+          Serial.print(attention, DEC);
+          Serial.print(" Time since last packet: ");
+          Serial.print(millis() - lastReceivedPacket, DEC);
+          lastReceivedPacket = millis();
+          Serial.print("\n");
     delay(100);                       
   } 
 #endif        
