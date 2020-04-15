@@ -130,7 +130,31 @@ void loop() {
           Serial.print(millis() - lastReceivedPacket, DEC);
           lastReceivedPacket = millis();
           Serial.print("\n");
-
+if (attention = 0, attention >0, attention <40)
+{
+  servo_left.write(0);              //move to 45 degrees
+  servo_right.write(0);
+delay(100);
+}
+else if (attention =100,attention >75, attention <100)
+{
+  servo_left.write(0);              //move to 45 degrees
+  servo_right.write(0);
+delay(100);
+}
+else if (attention >40, attention <50) 
+{
+  servo_left.write(45);              //move to 45 degrees
+  servo_right.write(45); 
+delay(100)
+}
+else if (attention >50, attention <75) 
+{
+  servo_left.write(45);              //move to 45 degrees
+  servo_right.write(45);
+delay(100);
+}
+/*
           switch(attention / 13) {
          case 0:
           servo_left.write(45);              //move to 45 degrees
@@ -146,7 +170,7 @@ void loop() {
           Serial.print("\n");
           delay(100);       
           break;
-          */
+          
   
          case 1:
           servo_left.write(0);                 //reset to initial state.
@@ -161,7 +185,7 @@ void loop() {
           lastReceivedPacket = millis();
           Serial.print("\n");
           delay(100);       
-          */
+          
           break;
           
 
@@ -177,7 +201,7 @@ void loop() {
            lastReceivedPacket = millis();
            Serial.print("\n");
            delay(100);   
-           */
+           
            break;
            
          case 3:
@@ -193,9 +217,10 @@ void loop() {
           lastReceivedPacket = millis();
           Serial.print("\n");
           delay(100);      
-          */
+          
             break;
-  }                      
+  }
+  */
  }
  
 #endif        
