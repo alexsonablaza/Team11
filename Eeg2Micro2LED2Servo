@@ -121,7 +121,7 @@ void loop() {
             digitalWrite(LED, HIGH);
           else
             digitalWrite(LED, LOW);
-           */
+       */
           Serial.print("PoorQuality: ");
           Serial.print(poorQuality, DEC);
           Serial.print(" Attention: ");
