@@ -1,16 +1,20 @@
+////////////////////////////////////////////////////////////////////////
+// Arduino Bluetooth Interface with Mindwave
+// 
+////////////////////////////////////////////////////////////////////////
 #include <Servo.h>             //Servo library
-Servo servo_left;        //initialize a servo object for the connected servo  
-Servo servo_right;
-//turn on eeg > arduino > bluetooth                
+Servo servo_test;        //initialize a servo object for the connected servo  
+                
 int angle = 0;    
-
 //GPIO13 CONNECTION LED STATUS
 #define LED 13
 #define BAUDRATE 57600
 #define DEBUGOUTPUT 0
 
 //GPIO 9 OUTPUT
-#define LIGHTON 9
+#define FOCUSLED 9
+
+
 #define powercontrol 10
 
 // checksum variables
@@ -32,10 +36,10 @@ boolean bigPacket = false;
 //////////////////////////
 void setup() {
 
-  servo_left.attach(7);
-  servo_right.attach(8);
-  pinMode(LIGHTON, OUTPUT);
+  servo_test.attach(7);
+  pinMode(FOCUSLED, OUTPUT);
  
+
   pinMode(LED, OUTPUT);
   Serial.begin(BAUDRATE);           // USB
 
@@ -70,7 +74,7 @@ void loop() {
       payloadLength = ReadOneByte();
       if(payloadLength > 169)                      //Payload length can not be greater than 169
           return;
-          
+
       generatedChecksum = 0;        
       for(int i = 0; i < payloadLength; i++) {  
         payloadData[i] = ReadOneByte();            //Read payload into memory
@@ -101,13 +105,13 @@ void loop() {
             i++;
             meditation = payloadData[i];
             break;
-          
+          //Adjusts smoothing
           case 0x80:
             i = i + 4;
             break;
          
           case 0x83:
-            i = i + 25;      
+            i = i + 23;      
             break;
           default:
             break;
@@ -116,51 +120,13 @@ void loop() {
 
 #if !DEBUGOUTPUT
 
-        /*if(bigPacket) {
+        // *** Add your code here ***
+
+        if(bigPacket) {
           if(poorQuality == 0)
             digitalWrite(LED, HIGH);
           else
             digitalWrite(LED, LOW);
-       */
-if(bigPacket){          
-if (attention = 0, attention >0, attention <40)
-{
-  servo_left.write(0);              //move to 45 degrees
-  servo_right.write(0);
-  delay(1000);
-}
-else if (attention =100,attention >75, attention <100)
-{
-  servo_left.write(0);              //move to 45 degrees
-  servo_right.write(0);
-  delay(1000);
-}
-else if (attention >40, attention <50) 
-{
-  servo_left.write(45);              //move to 45 degrees
-  servo_right.write(45); 
-  delay(1000);
-}
-else if (attention >50, attention <75) 
-{
-  servo_left.write(45);              //move to 45 degrees
-  servo_right.write(45);
-  delay(1000);
-}
- Serial.print("PoorQuality: ");
-          Serial.print(poorQuality, DEC);
-          Serial.print(" Attention: ");
-          Serial.print(attention, DEC);
-          Serial.print(" Time since last packet: ");
-          Serial.print(millis() - lastReceivedPacket, DEC);
-          lastReceivedPacket = millis();
-          Serial.print("\n");
-/*
-          switch(attention / 13) {
-         case 0:
-          servo_left.write(45);              //move to 45 degrees
-          servo_right.write(45);
-          /*
           Serial.print("PoorQuality: ");
           Serial.print(poorQuality, DEC);
           Serial.print(" Attention: ");
@@ -169,61 +135,84 @@ else if (attention >50, attention <75)
           Serial.print(millis() - lastReceivedPacket, DEC);
           lastReceivedPacket = millis();
           Serial.print("\n");
-          delay(100);       
-          break;
-          
-  
-         case 1:
-          servo_left.write(0);                 //reset to initial state.
-          servo_right.write(0);    
-         /*
-         Serial.print("PoorQuality: ");
-          Serial.print(poorQuality, DEC);
-          Serial.print(" Attention: ");
-          Serial.print(attention, DEC);
-          Serial.print(" Time since last packet: ");
-          Serial.print(millis() - lastReceivedPacket, DEC);
-          lastReceivedPacket = millis();
-          Serial.print("\n");
-          delay(100);       
-          
-          break;
-          
 
-         case 2:              
-           servo_left.write(90);                
-           servo_right.write(90);
-           /*Serial.print("PoorQuality: ");
-           Serial.print(poorQuality, DEC);
-           Serial.print(" Attention: ");
-           Serial.print(attention, DEC);
-           Serial.print(" Time since last packet: ");
-           Serial.print(millis() - lastReceivedPacket, DEC);
-           lastReceivedPacket = millis();
-           Serial.print("\n");
-           delay(100);   
+          switch(attention / 12) {
+          case 0:
+            
+            digitalWrite(FOCUSLED, LOW);
+                                                  for(angle = 180; angle>=1; angle-=5)     // command to move from 180 degrees to 0 degrees 
+  {                                
+    servo_test.write(angle);              //command to rotate the servo to the specified angle
+    delay(15);                       
+  } 
+                     delay(1000);   
+            break;
+          //No connection or low connection light is off
+          case 1:
            
-           break;
+            digitalWrite(FOCUSLED, LOW);
+
+            break;
+           //Poor quality is high then light is off
+          case 2:
            
-         case 3:
-          servo_left.write(0);              //reset to 0
-          servo_right.write(0);
-          /*
-          Serial.print("PoorQuality: ");
-          Serial.print(poorQuality, DEC);
-          Serial.print(" Attention: ");
-          Serial.print(attention, DEC);
-          Serial.print(" Time since last packet: ");
-          Serial.print(millis() - lastReceivedPacket, DEC);
-          lastReceivedPacket = millis();
-          Serial.print("\n");
-          delay(100);      
+            digitalWrite(FOCUSLED, LOW);
+         
+            break;
+          case 3:              
+          
+            digitalWrite(FOCUSLED, LOW);
+                       
+            break;
+          case 4:
+         
+            digitalWrite(FOCUSLED, LOW);
+ 
+
+ 
+            break;
+          //If I am not active then low
+          case 5:
+           
+            digitalWrite(FOCUSLED, LOW);
+ 
+
+          //For all cases where attention is greater than 60
+          case 6:              
+           
+            digitalWrite(FOCUSLED, HIGH);
+            for(angle = 0; angle < 180; angle += 1)    // command to move from 0 degrees to 180 degrees 
+  {                                  
+    servo_test.write(angle);                 //command to rotate the servo to the specified angle
+    delay(15);                       
+  } 
+ 
+  delay(1000);
+  
+                      
+            break;
+          case 7:
+          
+            digitalWrite(FOCUSLED, HIGH);
+  
+            break;    
+          case 8:
+          
+            digitalWrite(FOCUSLED, HIGH);
           
             break;
-  }
-  */
- }
- }
+          case 9:
+         
+            digitalWrite(FOCUSLED, HIGH);
+         
+            break;
+          case 10:
+       
+            digitalWrite(FOCUSLED, HIGH);
+      
+            break;           
+          }                     
+        }
 #endif        
         bigPacket = false;        
       }
@@ -232,4 +221,4 @@ else if (attention >50, attention <75)
       }  // end if else for checksum
     } // end if read 0xAA byte
   } // end if read 0xAA byte
-
+}
