@@ -116,12 +116,12 @@ void loop() {
 
 #if !DEBUGOUTPUT
 
-        if(bigPacket) {
+        /*if(bigPacket) {
           if(poorQuality == 0)
             digitalWrite(LED, HIGH);
           else
             digitalWrite(LED, LOW);
-            
+           */
           Serial.print("PoorQuality: ");
           Serial.print(poorQuality, DEC);
           Serial.print(" Attention: ");
@@ -231,4 +231,4 @@ else if (attention >50, attention <75)
       }  // end if else for checksum
     } // end if read 0xAA byte
   } // end if read 0xAA byte
-}
+
