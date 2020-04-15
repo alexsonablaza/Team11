@@ -173,8 +173,8 @@ void loop() {
 // code for converting brain waves to write to servo motors.
   digitalWrite(LIGHTON, HIGH);
   
-  if(poorQuality < 150){   
-  for(attention > 0;attention <25)    // no to low leve signal
+ 
+  if(attention > 0;attention <25)    // no to low leve signal
   {                                  
     servo_left.write(0);                 //reset to initial state.
     servo_right.write(0);                 
@@ -183,7 +183,7 @@ void loop() {
  
   delay(1000);
   
-  for(attention > 25; attention < 50)     // upcoming signal
+  if(attention > 25; attention < 50)     // upcoming signal
   {                                
     servo_left.write(45);              //move to 45 degrees
     servo_right.write(45);
@@ -192,7 +192,7 @@ void loop() {
 
     delay(1000);
     
-   for(attention <70; attention > 60)    // command to move from 90 degrees between 60- 70 attention level
+   if(attention <70; attention > 60)    // command to move from 90 degrees between 60- 70 attention level
   {                                  
     servo_left.write(90);                
     servo_right.write(90);
@@ -201,13 +201,13 @@ void loop() {
  
   delay(1000);
   
-  for(attention > 70; attention <60 )     //attention level is above our threshold
+  if(attention > 70; attention <60 )     //attention level is above our threshold
   {                                
     servo_left.write(0);              //reset to 0
     servo_right.write(0);
     delay(100);                       
   } 
-  }
+  
             break;
           case 7:
           
