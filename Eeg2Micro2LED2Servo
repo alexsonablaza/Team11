@@ -1,7 +1,7 @@
 #include <Servo.h>             //Servo library
 Servo servo_left;        //initialize a servo object for the connected servo  
 Servo servo_right;
-                
+//turn on eeg > arduino > bluetooth                
 int angle = 0;    
 //GPIO13 CONNECTION LED STATUS
 #define LED 13
