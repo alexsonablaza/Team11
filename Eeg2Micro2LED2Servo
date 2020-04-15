@@ -173,7 +173,7 @@ void loop() {
 // code for converting brain waves to write to servo motors.
   digitalWrite(LIGHTON, HIGH);
   
- 
+if(poorQuality <150){ 
   if(attention > 0;attention <25)    // no to low leve signal
   {                                  
     servo_left.write(0);                 //reset to initial state.
@@ -207,6 +207,7 @@ void loop() {
     servo_right.write(0);
     delay(100);                       
   } 
+  }
   
             break;
           case 7:
