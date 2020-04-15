@@ -3,7 +3,7 @@ Servo servo_left;        //initialize a servo object for the connected servo
 Servo servo_right;
 //turn on eeg > arduino > bluetooth                
 int angle = 0;    
-int byte;
+
 //GPIO13 CONNECTION LED STATUS
 #define LED 13
 #define BAUDRATE 57600
@@ -201,7 +201,7 @@ void loop() {
  
   delay(1000);
   
-  for(angle > 70; attention <60 )     //attention level is above our threshold
+  for(attention > 70; attention <60 )     //attention level is above our threshold
   {                                
     servo_left.write(0);              //reset to 0
     servo_right.write(0);
