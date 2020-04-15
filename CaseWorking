@@ -3,8 +3,8 @@
 // 
 ////////////////////////////////////////////////////////////////////////
 #include <Servo.h>             //Servo library
-Servo servo_test;        //initialize a servo object for the connected servo  
-                
+Servo servo_left;        //initialize a servo object for the connected servo  
+Servo servo_right;                
 int angle = 0;    
 //GPIO13 CONNECTION LED STATUS
 #define LED 13
@@ -36,7 +36,8 @@ boolean bigPacket = false;
 //////////////////////////
 void setup() {
 
-  servo_test.attach(7);
+  servo_left.attach(7);
+  servo_right.attach(7);
   pinMode(FOCUSLED, OUTPUT);
  
 
@@ -137,80 +138,22 @@ void loop() {
           Serial.print("\n");
 
           switch(attention / 12) {
-          case 0:
-            
-            digitalWrite(FOCUSLED, LOW);
-                                                  for(angle = 180; angle>=1; angle-=5)     // command to move from 180 degrees to 0 degrees 
-  {                                
-    servo_test.write(angle);              //command to rotate the servo to the specified angle
-    delay(15);                       
-  } 
-                     delay(1000);   
+          case 0 ... 29:
+            servo_left.write(0);              
+            servo_right.write(0);
             break;
-          //No connection or low connection light is off
-          case 1:
-           
-            digitalWrite(FOCUSLED, LOW);
-
+          case 30 ... 49:
+            servo_left.write(45);              
+            servo_right.write(45);
             break;
-           //Poor quality is high then light is off
-          case 2:
-           
-            digitalWrite(FOCUSLED, LOW);
-         
+          case 50 ... 75:
+            servo_left.write(90);              
+            servo_right.write(90);
             break;
-          case 3:              
-          
-            digitalWrite(FOCUSLED, LOW);
-                       
+          case 76 ... 100:
+            servo_left.write(0);              
+            servo_right.write(0);
             break;
-          case 4:
-         
-            digitalWrite(FOCUSLED, LOW);
- 
-
- 
-            break;
-          //If I am not active then low
-          case 5:
-           
-            digitalWrite(FOCUSLED, LOW);
- 
-
-          //For all cases where attention is greater than 60
-          case 6:              
-           
-            digitalWrite(FOCUSLED, HIGH);
-            for(angle = 0; angle < 180; angle += 1)    // command to move from 0 degrees to 180 degrees 
-  {                                  
-    servo_test.write(angle);                 //command to rotate the servo to the specified angle
-    delay(15);                       
-  } 
- 
-  delay(1000);
-  
-                      
-            break;
-          case 7:
-          
-            digitalWrite(FOCUSLED, HIGH);
-  
-            break;    
-          case 8:
-          
-            digitalWrite(FOCUSLED, HIGH);
-          
-            break;
-          case 9:
-         
-            digitalWrite(FOCUSLED, HIGH);
-         
-            break;
-          case 10:
-       
-            digitalWrite(FOCUSLED, HIGH);
-      
-            break;           
           }                     
         }
 #endif        
