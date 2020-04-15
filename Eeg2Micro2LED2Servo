@@ -116,7 +116,71 @@ void loop() {
 
 #if !DEBUGOUTPUT
 
-        // *** Add your code here ***
+ if(attention > 0;attention <25)    // no to low leve signal
+  {                                  
+    servo_left.write(0);                 //reset to initial state.
+    servo_right.write(0);    
+    Serial.print("PoorQuality: ");
+          Serial.print(poorQuality, DEC);
+          Serial.print(" Attention: ");
+          Serial.print(attention, DEC);
+          Serial.print(" Time since last packet: ");
+          Serial.print(millis() - lastReceivedPacket, DEC);
+          lastReceivedPacket = millis();
+          Serial.print("\n");
+   delay(100);                       
+  } 
+ 
+  delay(1000);
+  
+  if(attention > 25; attention < 50)     // upcoming signal
+  {                                
+    servo_left.write(45);              //move to 45 degrees
+    servo_right.write(45);
+    Serial.print("PoorQuality: ");
+          Serial.print(poorQuality, DEC);
+          Serial.print(" Attention: ");
+          Serial.print(attention, DEC);
+          Serial.print(" Time since last packet: ");
+          Serial.print(millis() - lastReceivedPacket, DEC);
+          lastReceivedPacket = millis();
+          Serial.print("\n");
+    delay(100);                       
+  } 
+
+    delay(1000);
+    
+   if(attention <70; attention > 60)    // command to move from 90 degrees between 60- 70 attention level
+  {                                  
+    servo_left.write(90);                
+    servo_right.write(90);
+    Serial.print("PoorQuality: ");
+          Serial.print(poorQuality, DEC);
+          Serial.print(" Attention: ");
+          Serial.print(attention, DEC);
+          Serial.print(" Time since last packet: ");
+          Serial.print(millis() - lastReceivedPacket, DEC);
+          lastReceivedPacket = millis();
+          Serial.print("\n");
+    delay(100);                       
+  } 
+ 
+  delay(1000);
+  
+  if(attention > 70; attention <60 )     //attention level is above our threshold
+  {                                
+    servo_left.write(0);              //reset to 0
+    servo_right.write(0);
+    Serial.print("PoorQuality: ");
+          Serial.print(poorQuality, DEC);
+          Serial.print(" Attention: ");
+          Serial.print(attention, DEC);
+          Serial.print(" Time since last packet: ");
+          Serial.print(millis() - lastReceivedPacket, DEC);
+          lastReceivedPacket = millis();
+          Serial.print("\n");
+    delay(100);                       
+  } 
 
         if(bigPacket) {
           if(poorQuality == 0)
@@ -195,71 +259,7 @@ void loop() {
           }   
           */                  
  }
-  if(attention > 0;attention <25)    // no to low leve signal
-  {                                  
-    servo_left.write(0);                 //reset to initial state.
-    servo_right.write(0);    
-    Serial.print("PoorQuality: ");
-          Serial.print(poorQuality, DEC);
-          Serial.print(" Attention: ");
-          Serial.print(attention, DEC);
-          Serial.print(" Time since last packet: ");
-          Serial.print(millis() - lastReceivedPacket, DEC);
-          lastReceivedPacket = millis();
-          Serial.print("\n");
-   delay(100);                       
-  } 
  
-  delay(1000);
-  
-  if(attention > 25; attention < 50)     // upcoming signal
-  {                                
-    servo_left.write(45);              //move to 45 degrees
-    servo_right.write(45);
-    Serial.print("PoorQuality: ");
-          Serial.print(poorQuality, DEC);
-          Serial.print(" Attention: ");
-          Serial.print(attention, DEC);
-          Serial.print(" Time since last packet: ");
-          Serial.print(millis() - lastReceivedPacket, DEC);
-          lastReceivedPacket = millis();
-          Serial.print("\n");
-    delay(100);                       
-  } 
-
-    delay(1000);
-    
-   if(attention <70; attention > 60)    // command to move from 90 degrees between 60- 70 attention level
-  {                                  
-    servo_left.write(90);                
-    servo_right.write(90);
-    Serial.print("PoorQuality: ");
-          Serial.print(poorQuality, DEC);
-          Serial.print(" Attention: ");
-          Serial.print(attention, DEC);
-          Serial.print(" Time since last packet: ");
-          Serial.print(millis() - lastReceivedPacket, DEC);
-          lastReceivedPacket = millis();
-          Serial.print("\n");
-    delay(100);                       
-  } 
- 
-  delay(1000);
-  
-  if(attention > 70; attention <60 )     //attention level is above our threshold
-  {                                
-    servo_left.write(0);              //reset to 0
-    servo_right.write(0);
-    Serial.print("PoorQuality: ");
-          Serial.print(poorQuality, DEC);
-          Serial.print(" Attention: ");
-          Serial.print(attention, DEC);
-          Serial.print(" Time since last packet: ");
-          Serial.print(millis() - lastReceivedPacket, DEC);
-          lastReceivedPacket = millis();
-          Serial.print("\n");
-    delay(100);                       
-  } 
 #endif        
         bigPacket = false;        
       }
