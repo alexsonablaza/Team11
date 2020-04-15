@@ -122,14 +122,6 @@ void loop() {
           else
             digitalWrite(LED, LOW);
        */
-          Serial.print("PoorQuality: ");
-          Serial.print(poorQuality, DEC);
-          Serial.print(" Attention: ");
-          Serial.print(attention, DEC);
-          Serial.print(" Time since last packet: ");
-          Serial.print(millis() - lastReceivedPacket, DEC);
-          lastReceivedPacket = millis();
-          Serial.print("\n");
 if(bigPacket){          
 if (attention = 0, attention >0, attention <40)
 {
@@ -155,6 +147,14 @@ else if (attention >50, attention <75)
   servo_right.write(45);
   delay(1000);
 }
+ Serial.print("PoorQuality: ");
+          Serial.print(poorQuality, DEC);
+          Serial.print(" Attention: ");
+          Serial.print(attention, DEC);
+          Serial.print(" Time since last packet: ");
+          Serial.print(millis() - lastReceivedPacket, DEC);
+          lastReceivedPacket = millis();
+          Serial.print("\n");
 /*
           switch(attention / 13) {
          case 0:
