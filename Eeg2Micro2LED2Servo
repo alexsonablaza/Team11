@@ -3,6 +3,7 @@ Servo servo_left;        //initialize a servo object for the connected servo
 Servo servo_right;
 //turn on eeg > arduino > bluetooth                
 int angle = 0;    
+int byte;
 //GPIO13 CONNECTION LED STATUS
 #define LED 13
 #define BAUDRATE 57600
