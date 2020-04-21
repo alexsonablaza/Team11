@@ -132,13 +132,15 @@ void loop() {
           Serial.print(poorQuality, DEC);
           Serial.print(" Attention: ");
           Serial.print(attention, DEC);
+          Serial.print(" Meditation: ");
+          Serial.print(meditation, DEC);
           Serial.print(" Time since last packet: ");
           Serial.print(millis() - lastReceivedPacket, DEC);
           lastReceivedPacket = millis();
           Serial.print("\n");
 
           switch(attention / 12) {
-          case 0 ... 29:
+          case 0 ... 29:          //for attention values 0 through 29
             servo_left.write(0);              
             servo_right.write(0);
             break;
