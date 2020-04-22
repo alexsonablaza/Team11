@@ -138,7 +138,7 @@ void loop() {
           Serial.print(millis() - lastReceivedPacket, DEC);
           lastReceivedPacket = millis();
           Serial.print("\n");
-if(poorquality<10){
+if(poorQuality<10){
           switch(attention / 12) {
           case 0 ... 29:          //for attention values 0 through 29
             servo_left.write(0);              
