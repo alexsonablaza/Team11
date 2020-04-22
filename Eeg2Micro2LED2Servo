@@ -172,7 +172,7 @@ else if (attention >= 50 && attention <= 75)
           delay(100);       
           break;
           
-  
+  if(quality<10){
          case 1:
           servo_left.write(0);                 //reset to initial state.
           servo_right.write(0);    
@@ -221,7 +221,7 @@ else if (attention >= 50 && attention <= 75)
           
             break;
   }
-  */
+  }
  }
  }
 #endif        
