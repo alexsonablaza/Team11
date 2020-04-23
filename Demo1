@@ -13,7 +13,7 @@ Servo servo_right;
 
 //GPIO 9 OUTPUT
 #define FOCUSLED 9
-
+#define FOCUSLED2 11
 
 #define powercontrol 10
 
@@ -144,21 +144,29 @@ if(poorQuality<10){
           case 0 ... 29:          //for attention values 0 through 29
             servo_left.write(0);              
             servo_right.write(0);
+            digitalWrite(FOCUSLED, LOW);
+            digitalWrite(FOCUSLED2, LOW);
             delay(1000);
             break;
           case 30 ... 49:
             servo_left.write(45);              
             servo_right.write(45);
+            digitalWrite(FOCUSLED, HIGH);
+            digitalWrite(FOCUSLED2, LOW);
             delay(1000);
             break;
           case 50 ... 75:
             servo_left.write(90);              
             servo_right.write(90);
+            digitalWrite(FOCUSLED, LOW);
+            digitalWrite(FOCUSLED2, HIGH);
             delay(1000);
             break;
           case 76 ... 100:
             servo_left.write(0);              
             servo_right.write(0);
+            digitalWrite(FOCUSLED, LOW);
+            digitalWrite(FOCUSLED2, LOW);
             delay(1000);
             break;
           delay(1000);
