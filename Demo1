@@ -13,7 +13,7 @@ Servo servo_right;
 
 //GPIO 9 OUTPUT
 #define FOCUSLED 9
-#define FOCUSLED2 11
+#define FOCUSLED2 10
 
 #define powercontrol 10
 
@@ -39,9 +39,9 @@ void setup() {
   servo_left.attach(7);
   servo_right.attach(7);
   pinMode(FOCUSLED, OUTPUT);
- 
+  pinMode(FOCUSLED2, OUTPUT);
 
-  pinMode(LED, OUTPUT);
+  
   Serial.begin(BAUDRATE);           // USB
 
 }
@@ -169,7 +169,6 @@ if(poorQuality<10){
             digitalWrite(FOCUSLED2, LOW);
             delay(1000);
             break;
-          delay(1000);
           }                     
         }
       }     
