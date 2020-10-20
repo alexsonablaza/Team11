@@ -38,6 +38,7 @@ void setup() {
 
   servo_left.attach(7);
   servo_right.attach(7);
+  pinMode(button,INPUT);
   pinMode(FOCUSLED, OUTPUT);
   pinMode(FOCUSLED2, OUTPUT);
 
@@ -66,8 +67,10 @@ byte ReadOneByte() {
 //MAIN LOOP//
 /////////////
 void loop() {
-
-
+buttonState = digitalRead(button)
+if(buttonState == LOW){
+ Serial.print("Exoskeleton is OFF\n");
+ }else{
   // Look for sync bytes
   if(ReadOneByte() == 170) {
     if(ReadOneByte() == 170) {
@@ -177,4 +180,4 @@ if(poorQuality<10){
       } // end if else for checksum
     } // end if read 0xAA byte
   } // end if read 0xAA byte
-
+}
