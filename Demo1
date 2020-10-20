@@ -70,6 +70,10 @@ void loop() {
 buttonState = digitalRead(button)
 if(buttonState == LOW){
  Serial.print("Exoskeleton is OFF\n");
+ servo_left.write(0);              
+ servo_right.write(0);
+ digitalWrite(FOCUSLED, LOW);
+ digitalWrite(FOCUSLED2, LOW)
  }else{
   // Look for sync bytes
   if(ReadOneByte() == 170) {
