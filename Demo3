@@ -6,14 +6,15 @@
 ////////////////////////////////////////////////////////////////////////
 #include <Servo.h>             //Servo library
 #include <Wire.h>
+#include <LiquidCrystal_I2C.h>
 
-
+LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27,20,4);
 
 Servo servo_left;        //initialize a servo object for the connected servo  
 Servo servo_right;                
    
 //GPIO13 CONNECTION LED STATUS
-#define LED 12              //LED STATUS
+#define LED 13              //LED STATUS
 #define BAUDRATE 57600
 #define DEBUGOUTPUT 0
 
@@ -45,14 +46,17 @@ long debounceDelay = 170;
 //////////////////////////
 void setup() {
 
-  servo_left.attach(52);                   //SERVO IS ATTACHED TO GPIO 7 THIS MOVES PROPELLER LEFT OR CLOCKWISE
-  servo_right.attach(52);                  //SERVO IS ATTACHED TO GPIO7 THIS MOVES PROPELLER RIGHT OR CLOCKWISE
+  servo_left.attach(52);                  //SERVO IS ATTACHED TO GPIO 7 THIS MOVES PROPELLER LEFT OR CLOCKWISE
+  servo_right.attach(52);                 //SERVO IS ATTACHED TO GPIO7 THIS MOVES PROPELLER RIGHT OR CLOCKWISE
   pinMode(FOCUSLED, OUTPUT);              //YELLOW LED INDICATES LOWER ATTENTION VALUES
   pinMode(FOCUSLED2, OUTPUT);             //GREEN LED INDICATE HIGHER ATTENTION VALUES
   pinMode(LED, OUTPUT);                   //LED STATUS FOR INTERCONNECTION OF EEG AND MICROCONTROLLER
   pinMode(button,INPUT);                  //declare button
-  Serial.begin(BAUDRATE);           // USB
+  lcd.init();
+  lcd.backlight();
+  Serial.begin(BAUDRATE);  
 
+ 
 }
 
 ////////////////////////////////
@@ -79,20 +83,21 @@ buttonstate = digitalRead(button);
 if ((millis()-lastDebounceTime)>debounceDelay){
   if(buttonstate == HIGH){
     state = -state;
-    delay(100);
+    delay(150);
   }
 }
   // Look for sync 
     if(state == 1){
    buttonstate = digitalRead(button);
    Serial.print("Exoskeleton is RESET\n");
-
+   lcd.setCursor(0,0);
+   lcd.print("Exoskeleton is RESET");
    servo_left.write(0);              
    servo_right.write(0);
    digitalWrite(FOCUSLED, LOW);
    digitalWrite(FOCUSLED2, LOW);
    lastDebounceTime == millis();
-   delay(100);
+   delay(500);
     }
     
  if(state == -1){
@@ -167,15 +172,35 @@ if ((millis()-lastDebounceTime)>debounceDelay){
           Serial.print(millis() - lastReceivedPacket, DEC);
           lastReceivedPacket = millis();
           Serial.print("\n");
+          lcd.clear();
+             lcd.setCursor(0,0);
+   lcd.print("Attention Value:");
+    lcd.setCursor(0,1);
+    lcd.print(attention);
+    lcd.setCursor(0,2);
+   lcd.print("Meditation");
+     lcd.setCursor(0,3);
+    lcd.print(attention);
 
      if(poorQuality<10){     ///TRAINING Parameters for hand movements
 if(poorQuality<10){
+  lcd.clear();
           switch(attention) {
           case 0 ... 29:                           //FOR ATTENTION VALUES THAT ARE BETWEEN AND INCLUDING 0 AND 29 WE DO NOT WANT ANYMOVEMENT BECAUSE OF NOISE VARIANCE DISTORTION
-            servo_left.write(0);                   //RED LED LIGHT
+            servo_left.write(0);                 
             servo_right.write(0);
             digitalWrite(FOCUSLED, LOW);
             digitalWrite(FOCUSLED2, LOW);
+            digitalWrite(LED, HIGH);
+            lcd.clear();
+             lcd.setCursor(0,0);
+   lcd.print("Attention Value:");
+    lcd.setCursor(0,1);
+    lcd.print(attention);
+    lcd.setCursor(0,2);
+   lcd.print("Meditation");
+     lcd.setCursor(0,3);
+    lcd.print(attention);
             delay(1000);
             break;
           case 30 ... 49:                           //FOR CASES WHERE ATTENTION SPAN IS FROM 30 TO 49 THE SERVO MOTOR MOVES 23 DEGREES COUNTER CLOCK WISE OR RIGHT (MINIMUM ANGLE)
@@ -183,25 +208,56 @@ if(poorQuality<10){
            servo_right.write(60);
             digitalWrite(FOCUSLED, HIGH);
             digitalWrite(FOCUSLED2, LOW);
+            digitalWrite(LED, LOW);
+               lcd.clear();
+             lcd.setCursor(0,0);
+   lcd.print("Attention Value:");
+    lcd.setCursor(0,1);
+    lcd.print(attention);
+    lcd.setCursor(0,2);
+   lcd.print("Meditation");
+     lcd.setCursor(0,3);
+    lcd.print(attention);
             delay(1000);
             break;
-          case 50 ... 75:                           //FOR CASES WHERE ATTENTION SPAN IS FROM 50 TO 75 THE SERVO MOTOR MOVES 45 DEGREES COUNTER CLOCK WISE OR RIGHT (MAXIMUM ANGLE)
+          case 50 ... 90:                           //FOR CASES WHERE ATTENTION SPAN IS FROM 50 TO 75 THE SERVO MOTOR MOVES 45 DEGREES COUNTER CLOCK WISE OR RIGHT (MAXIMUM ANGLE)
             servo_left.write(80);                   //GREEN LED LIGHT
             servo_right.write(80);
             digitalWrite(FOCUSLED, LOW);
             digitalWrite(FOCUSLED2, HIGH);
+            digitalWrite(LED, LOW);
+               lcd.clear();
+             lcd.setCursor(0,0);
+   lcd.print("Attention Value:");
+    lcd.setCursor(0,1);
+    lcd.print(attention);
+    lcd.setCursor(0,2);
+   lcd.print("Meditation");
+     lcd.setCursor(0,3);
+    lcd.print(attention);
             delay(1000);
             break;
-          case 76 ... 100:
+          case 91 ... 100:
             servo_left.write(-45);                  //FOR CASES WHERE THE ATTENTION SPAN IS VERY HIGH THIS WILL SERVE AS A FEED BACK TO REDUCE DAMAGE TO THE FINGERS
             servo_right.write(-45);                 //NO LIGHTS
-            digitalWrite(FOCUSLED, LOW);
-            digitalWrite(FOCUSLED2, LOW);
+            digitalWrite(FOCUSLED, HIGH);
+            digitalWrite(FOCUSLED2, HIGH);
+            digitalWrite(LED, HIGH);
+               lcd.clear();
+             lcd.setCursor(0,0);
+   lcd.print("Attention Value:");
+    lcd.setCursor(0,1);
+    lcd.print(attention);
+    lcd.setCursor(0,2);
+   lcd.print("Meditation");
+     lcd.setCursor(0,3);
+    lcd.print(attention);
             delay(1000);
             break;
           }                     
         }
       }     
+      
         bigPacket = false;       
         } 
         } // Checksum Error
