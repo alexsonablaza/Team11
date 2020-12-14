@@ -1,0 +1,275 @@
+
+
+////////////////////////////////////////////////////////////////////////
+// Team 11  - ExoHand
+// 
+////////////////////////////////////////////////////////////////////////
+#include <Servo.h>             //Servo library
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+
+LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27,20,4);
+
+Servo servo;        //initialize a servo object for the connected servo  
+            
+   
+//GPIO13 CONNECTION LED STATUS
+
+#define BAUDRATE 57600
+#define DEBUGOUTPUT 0
+
+//GPIO 11 AND 12 AND 13 LED OUTPUT
+#define FOCUSLED 11                
+#define FOCUSLED2 12
+#define LED 13
+
+//FAILSAFE BUTTON 5
+#define button 5
+
+int buttonstate = 0;
+int state = 1;
+// checksum variables
+byte generatedChecksum = 0;
+byte checksum = 0; 
+int payloadLength = 0;
+byte payloadData[64] = {
+  0};
+byte poorQuality = 0;
+byte attention = 0;
+byte meditation = 0;
+
+// system variables
+long lastReceivedPacket = 0;
+boolean bigPacket = false;
+long lastDebounceTime = 0;
+long debounceDelay = 170;
+
+//////////////////////////
+// Microprocessor Setup //
+//////////////////////////
+void setup() {
+
+  servo.attach(4);                        //SERVO IS ATTACHED TO GPIO 4 THIS MOVES PROPELLER
+  pinMode(FOCUSLED, OUTPUT);              //YELLOW LED INDICATES LOWER ATTENTION VALUES
+  pinMode(FOCUSLED2, OUTPUT);             //GREEN LED INDICATE HIGHER ATTENTION VALUES
+  pinMode(LED, OUTPUT);                   //LED STATUS FOR INTERCONNECTION OF EEG AND MICROCONTROLLER
+  pinMode(button,INPUT);                  //declare button
+  lcd.init();
+  lcd.backlight();
+  Serial.begin(BAUDRATE);  
+
+ 
+}
+
+////////////////////////////////
+// Read data from Serial UART //
+////////////////////////////////
+byte ReadOneByte() {
+  int ByteRead;
+
+  while(!Serial.available());
+  ByteRead = Serial.read();
+
+#if DEBUGOUTPUT  
+  Serial.print((char)ByteRead);   // echo the same byte out the USB serial (for debug purposes)
+#endif
+
+  return ByteRead;
+}
+
+/////////////
+//MAIN LOOP//
+/////////////
+void loop() {
+buttonstate = digitalRead(button);
+if ((millis()-lastDebounceTime)>debounceDelay){
+  if(buttonstate == HIGH){
+    state = -state;
+    delay(170);
+  }
+}
+  // Look for sync 
+    if(state == 1){
+   buttonstate = digitalRead(button);
+   Serial.print("Exoskeleton is RESET\n");
+   lcd.setCursor(0,0);
+   lcd.print("Exoskeleton is RESET");
+   lcd.setCursor(0,1);
+   lcd.print("   Press Button");
+   lcd.setCursor(0,2);
+   lcd.print("    When Ready");
+   lcd.setCursor(0,3);
+   lcd.print("      ******");
+   servo.write(0);              
+   digitalWrite(LED, HIGH);
+   digitalWrite(FOCUSLED, LOW);
+   digitalWrite(FOCUSLED2, LOW);
+   lastDebounceTime == millis();
+   delay(170);
+    }
+    
+ if(state == -1){
+     lastDebounceTime == millis();
+    if(ReadOneByte() == 170) {
+   
+   if(ReadOneByte() == 170) {
+
+      payloadLength = ReadOneByte();
+      if(payloadLength > 169)                           //Payload length can not be greater than 169
+          return;
+
+      generatedChecksum = 0;        
+      for(int i = 0; i < payloadLength; i++) {  
+        payloadData[i] = ReadOneByte();                //Read payload into memory
+        generatedChecksum += payloadData[i];
+      }   
+
+      checksum = ReadOneByte();                        //Read checksum byte from stream      
+      generatedChecksum = 255 - generatedChecksum;     //Take one's compliment of generated checksum
+
+        if(checksum == generatedChecksum) {    
+
+        poorQuality = 200;                             //WORST CASE NO COMMUNICATION BETWEEN EEG SENSOR AND MICROCONTROLLER
+        attention = 0;
+        meditation = 0;
+
+        for(int i = 0; i < payloadLength; i++) {      // Parse the payload
+          switch (payloadData[i]) {
+          case 2:
+            i++;            
+            poorQuality = payloadData[i];
+            bigPacket = true;            
+            break;
+          case 4:
+            i++;
+            attention = payloadData[i];                        
+            break;
+          case 5:
+            i++;
+            meditation = payloadData[i];
+            break;
+          //Adjusts smoothing
+          case 0x80:
+            i = i + 3;
+            break;
+         
+          case 0x83:
+            i = i + 23;      
+            break;
+          default:
+            break;
+          } // switch
+        } // for loop
+
+
+        // Serial Monitor
+        if(bigPacket) {
+          if(poorQuality == 0)
+            digitalWrite(LED, HIGH);
+          else
+            digitalWrite(LED, LOW);
+          Serial.print(" PoorQuality: ");
+          Serial.print(poorQuality, DEC);
+          Serial.print(" Attention: ");
+          Serial.print(attention);
+          Serial.print(" Meditation: ");
+          Serial.print(meditation, DEC);
+          Serial.print(" Time since last packet: ");
+          Serial.print(millis() - lastReceivedPacket, DEC);
+          lastReceivedPacket = millis();
+          Serial.print("\n");
+
+          //LCD Monitor
+   lcd.clear();
+   lcd.setCursor(0,0);
+   lcd.print("Attention");
+   lcd.setCursor(0,1);
+   lcd.print(attention);
+   lcd.setCursor(0,2);
+   lcd.print("PoorQuality");
+   lcd.setCursor(0,3);
+   lcd.print(poorQuality);
+
+   //IF statement used for when EEG band is attached
+    if(poorQuality<10){
+if(poorQuality<10){
+  lcd.clear();
+          switch(attention) {
+  case 0 ... 29:                           //FOR ATTENTION VALUES THAT ARE BETWEEN AND INCLUDING 0 AND 29 WE WANT MINIMAL MOVEMENT BECAUSE OF NOISE VARIANCE DISTORTION
+            servo.write(15);                 
+            digitalWrite(FOCUSLED, LOW);
+            digitalWrite(FOCUSLED2, LOW);
+   lcd.clear();
+   lcd.setCursor(0,0);
+   lcd.print("Attention");
+   lcd.setCursor(0,1);
+   lcd.print(attention);
+   lcd.setCursor(0,2);
+   lcd.print("PoorQuality");
+   lcd.setCursor(0,3);
+   lcd.print(poorQuality);
+            delay(1000);
+            break;
+  case 30 ... 55:                         //FOR CASES WHERE ATTENTION SPAN IS FROM 30 TO 55 THE SERVO MOTOR MOVES 60 DEGREES COUNTER CLOCK WISE OR RIGHT 60 degrees (MINIMUM ANGLE)
+          servo.write(60);                   //YELLOW LED LIGHT
+          
+   digitalWrite(FOCUSLED, HIGH);
+   digitalWrite(FOCUSLED2, LOW);
+   digitalWrite(LED, LOW);
+            lcd.clear();
+            lcd.setCursor(0,0);
+   lcd.print("Attention");
+   lcd.setCursor(0,1);
+   lcd.print(attention);
+   lcd.setCursor(0,2);
+   lcd.print("PoorQuality");
+   lcd.setCursor(0,3);
+   lcd.print(poorQuality);
+            delay(1000);
+            break;
+   case 56 ... 80:                           //FOR CASES WHERE ATTENTION SPAN IS FROM 56 TO 80 THE SERVO MOTOR MOVES 120 DEGREES COUNTER CLOCK WISE OR RIGHT (MAXIMUM ANGLE)
+            servo.write(120);                   //GREEN LED LIGHT
+            
+            digitalWrite(FOCUSLED, LOW);
+            digitalWrite(FOCUSLED2, HIGH);
+            digitalWrite(LED, LOW);
+   lcd.clear();
+   lcd.setCursor(0,0);
+   lcd.print("Attention Value:");
+   lcd.setCursor(0,1);
+   lcd.print(attention);
+   lcd.setCursor(0,2);
+   lcd.setCursor(0,2);
+   lcd.print("PoorQuality");
+   lcd.setCursor(0,3);
+   lcd.print(poorQuality);
+            delay(1000);
+            break;
+   case 81 ... 100:
+            servo.write(0);                  //FOR CASES WHERE THE ATTENTION SPAN IS VERY HIGH THIS WILL SERVE AS A FEED BACK TO REDUCE DAMAGE TO THE FINGERS
+                            
+            digitalWrite(FOCUSLED, HIGH);
+            digitalWrite(FOCUSLED2, HIGH);
+            digitalWrite(LED, HIGH);
+   lcd.clear();
+   lcd.setCursor(0,0);
+   lcd.print("Attention:");
+   lcd.setCursor(0,1);
+   lcd.print(attention);
+   lcd.setCursor(0,2);
+   lcd.print("PoorQuality");
+   lcd.setCursor(0,3);
+   lcd.print(poorQuality);
+            delay(1000);
+            break;
+          }                     
+        }
+      }
+        bigPacket = false;       
+        } 
+        } // Checksum Error
+      } // end if else for checksum
+// end if read 0xAA byte 
+ } // end if read 0xAA byte
+ }
+}
